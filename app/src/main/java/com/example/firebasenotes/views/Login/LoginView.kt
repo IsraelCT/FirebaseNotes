@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 
 import androidx.compose.material3.Button
 
@@ -24,10 +25,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.firebasenotes.components.Alert
 import com.example.firebasenotes.viewModels.LoginViewmodel
 
 @Composable
-fun LoginView(navController: NavController,loginVM : LoginViewmodel) {
+fun LoginView(navController: NavController, loginVM: LoginViewmodel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordEnable by remember { mutableStateOf(true) }
@@ -37,8 +39,10 @@ fun LoginView(navController: NavController,loginVM : LoginViewmodel) {
             onValueChange = { email = it },
             maxLines = 1,
             singleLine = true,
-            label = {Text(text = "Escribe tu correo")},
-            modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp),
+            label = { Text(text = "Escribe tu correo") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
         OutlinedTextField(
@@ -46,17 +50,32 @@ fun LoginView(navController: NavController,loginVM : LoginViewmodel) {
             onValueChange = { password = it },
             maxLines = 1,
             singleLine = true,
-            label = {Text(text = "Escribe tu contraseña")},
-            modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp),
+            label = { Text(text = "Escribe tu contraseña") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = if (passwordEnable) PasswordVisualTransformation() else VisualTransformation.None
 
         )
         Spacer(Modifier.height(20.dp))
-        Button(onClick = { loginVM.login(email,password){
-            navController.navigate("Home")
-        } }, modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp)) {
+        Button(onClick = {
+            loginVM.login(email, password) {
+                navController.navigate("Home")
+            }
+        }, modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp, end = 30.dp)) {
             Text("Entrar")
+        }
+        if (loginVM.showAlert) {
+            Alert(
+                title = "Alerta",
+                message = "Usuario y/o contraseña incorrecto",
+                confirmText = "Aceptar",
+                onConfirmClick = { loginVM.closeAlert() }) {
+
+            }
         }
 
     }
