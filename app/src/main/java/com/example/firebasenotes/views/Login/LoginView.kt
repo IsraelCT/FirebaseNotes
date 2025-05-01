@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
+
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
+
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +53,9 @@ fun LoginView(navController: NavController,loginVM : LoginViewmodel) {
 
         )
         Spacer(Modifier.height(20.dp))
-        Button(onClick = {}, modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp)) {
+        Button(onClick = { loginVM.login(email,password){
+            navController.navigate("Home")
+        } }, modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp)) {
             Text("Entrar")
         }
 
