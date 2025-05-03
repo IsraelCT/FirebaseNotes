@@ -1,5 +1,7 @@
 package com.example.firebasenotes.views.Notes
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,11 +30,11 @@ import com.example.firebasenotes.viewModels.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNoteView(navController: NavController, noteVM: NotesViewModel) {
+fun AddNoteView(navController: NavController, notesVM: NotesViewModel) {
 
     var title by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
-    val contex = LocalContext
+    val contex = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -45,7 +47,13 @@ fun AddNoteView(navController: NavController, noteVM: NotesViewModel) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        notesVM.saveNewNote(title = title, note = note){
+                            //No olvidar crear la variable val context = LocalContext. Current
+                            Toast.makeText(contex,"Guardar", Toast.LENGTH_LONG).show()
+                            navController.popBackStack()
+                        }
+                    }) {
                         Icon(imageVector = Icons.Default.AddCircle, contentDescription = "")
                     }
                 }
