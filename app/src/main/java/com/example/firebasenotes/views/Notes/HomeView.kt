@@ -75,6 +75,7 @@ fun HomeView(navController: NavController, notesVM: NotesViewModel) {
                 items (datos.value) {
                     item ->
                     CardNote(title =item.title, note = item.note, date = item.date ) { }
+                    navController.navigate("EditNoteView/${item.idDoc}")
                 }
             }
             }
