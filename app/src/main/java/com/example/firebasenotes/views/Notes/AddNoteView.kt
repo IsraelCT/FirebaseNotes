@@ -3,6 +3,7 @@ package com.example.firebasenotes.views.Notes
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,7 +39,7 @@ fun AddNoteView(navController: NavController, notesVM: NotesViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Nueva cuenta") },
+                title = { Text(text = "Nueva nota") },
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
@@ -48,9 +49,9 @@ fun AddNoteView(navController: NavController, notesVM: NotesViewModel) {
                 },
                 actions = {
                     IconButton(onClick = {
-                        notesVM.saveNewNote(title = title, note = note){
+                        notesVM.saveNewNote(title = title, note = note) {
                             //No olvidar crear la variable val context = LocalContext. Current
-                            Toast.makeText(contex,"Guardar", Toast.LENGTH_LONG).show()
+                            Toast.makeText(contex, "Guardar", Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         }
                     }) {
@@ -80,6 +81,7 @@ fun AddNoteView(navController: NavController, notesVM: NotesViewModel) {
                 label = { Text(text = "Nota") },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
             )
 
