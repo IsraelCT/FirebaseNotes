@@ -32,6 +32,14 @@ class NotesViewModel : ViewModel() {
 
         var state by mutableStateOf(NotesState())
             private set
+    fun onValue(value : String, text : String){
+        when(text){
+            "title" -> state = state.copy(title = value)
+            "note" -> state = state.copy(note = value)
+        }
+    }
+
+
 
     fun fetchNotes(){
         val email =auth.currentUser?.email
@@ -93,11 +101,49 @@ class NotesViewModel : ViewModel() {
                 if (snapshot != null){
                     val note = snapshot.toObject(NotesState :: class.java)
                     state = state.copy(
-                        title = note?.title ?:"",
-                        note = note?.note ?:""
+                        title = note?.title ?: "",
+                        note = note?.note ?: ""
                     )
                 }
             }
+    }
+
+    fun updateNote(idDoc : String, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val editNote = hashMapOf(
+                    "title" to state.title,
+                    "note " to state.note,
+
+                )
+                firestore.collection("Notes").document(idDoc)
+                    .update(editNote as Map<String, Any>)
+                    .addOnSuccessListener  {
+                        onSuccess()
+                    } //Nota: "El problema que tenia es que no podia guardar mi nota
+                // Porque tenia dos {} despues del .addOnSuccessListenerp
+            } catch (e: Exception) {
+                Log.d("Error save", "Error al editar ${e.localizedMessage}")
+            }
+        }
+
+    }
+
+    fun deleteNote(idDoc : String, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+
+                firestore.collection("Notes").document(idDoc)
+                    .delete()
+                    .addOnSuccessListener  {
+                        onSuccess()
+                    } //Nota: "El problema que tenia es que no podia guardar mi nota
+                // Porque tenia dos {} despues del .addOnSuccessListenerp
+            } catch (e: Exception) {
+                Log.d("Error save", "Error al eliminar ${e.localizedMessage}")
+            }
+        }
+
     }
 
     fun signOut() {
