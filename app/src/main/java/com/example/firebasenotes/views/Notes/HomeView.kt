@@ -23,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
 
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
@@ -70,9 +71,9 @@ fun HomeView(navController: NavController, notesVM: NotesViewModel) {
             modifier = Modifier.padding(pad),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            val datos = notesVM.notesData.collectAsState()
+            val datos by notesVM.notesData.collectAsState()
             LazyColumn {
-                items (datos.value) {
+                items (datos) {
                     item ->
                     CardNote(title =item.title, note = item.note, date = item.date ) { }
                     navController.navigate("EditNoteView/${item.idDoc}")
